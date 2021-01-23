@@ -1,0 +1,11 @@
+{
+  "name": "n0dwis/bothelp_test",
+  "require": {
+    "php-amqplib/php-amqplib": "^2.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "BotHelp\\": "src/"
+    }
+  }
+}

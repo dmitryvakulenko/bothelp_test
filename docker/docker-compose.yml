@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  processor:
+    image: n0dwis/php-7.3-cli:1.2
+    working_dir: /app
+    volumes:
+      - '..:/app'
+    tty: true
+    command: /bin/sh
+
+  generator:
+    image: n0dwis/php-7.3-cli:1.2
+    working_dir: /app
+    volumes:
+      - '..:/app'
+    tty: true
+
+  queue:
+    image: redis:6.0.10-alpine3.12
+
+  postgres:
+    image: postgres:10.4
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: dev
+    ports:
+      - 5432

@@ -1,0 +1,7 @@
+{
+    "name": "n0dwis/bothelp_test",
+    "type": "project",
+    "require": {
+        "php-amqplib/php-amqplib": "^2.12"
+    }
+}
