@@ -20,8 +20,11 @@ if ($res === false) {
     echo "Error table clearing " . print_r($db->errorInfo(), true);
 }
 
-
-$pool = new Pool(THREADS_AMOUNT, Composer::class);
+$composer = new Composer();
+$pool = new Pool(THREADS_AMOUNT, \BotHelp\Worker::class, [$composer]);
 for ($i = 0; $i < THREADS_AMOUNT; $i++) {
     $pool->submit(new Processor(DSL, REDIS_HOST, QUEUE_NAME, TABLE_NAME));
 }
+
+while ($pool->collect());
+$pool->shutdown();

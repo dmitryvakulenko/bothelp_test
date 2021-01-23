@@ -4,9 +4,8 @@ namespace BotHelp;
 
 use PDO;
 use Redis;
-use Threaded;
 
-class Processor extends Threaded
+class Processor extends \Thread
 {
     /**
      * @var string
@@ -54,6 +53,7 @@ class Processor extends Threaded
         while (!($msg = $redis->rPop($this->queueName))) {}
 
         $parsedMsg = json_decode($msg, true);
+        // эмуляция обработки
         sleep(rand(0, 3));
 
         while (!$this->worker->canStore($parsedMsg['index'])) {
@@ -63,7 +63,7 @@ class Processor extends Threaded
         $stmt->execute([
             'account' => $parsedMsg['record']['account_id'],
             'event' => $parsedMsg['record']['event_id']]);
-        echo sprintf("Processed account %d event %d\n", $parsedMsg['record']['account_id'], $parsedMsg['record']['event_id']);
+        echo sprintf("(%d) Processed account %d event %d\n", \Thread::getCurrentThreadId(), $parsedMsg['record']['account_id'], $parsedMsg['record']['event_id']);
         $this->worker->stored($parsedMsg['index']);
     }
 }

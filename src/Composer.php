@@ -2,9 +2,9 @@
 
 namespace BotHelp;
 
-use Worker;
+use Volatile;
 
-class Composer extends Worker
+class Composer extends Volatile
 {
     /**
      * @var int
@@ -13,18 +13,10 @@ class Composer extends Worker
 
     public function canStore(int $id)
     {
-        return $this->synchronized(function($id) {
-            return ($id - $this->lastStoredId) == 1;
-        }, $id);
+        return ($id - $this->lastStoredId) == 1;
     }
 
     public function stored(int $id) {
-        // здесь синхронизация, в принципе, не обязательна
-        // т.к. сюда дойти может только один поток
-        // но для избежания ожиданий из-за кеша процессора
-        // лучше поставить
-        $this->synchronized(function($id) {
-            $this->lastStoredId = $id;
-        }, $id);
+        $this->lastStoredId = $id;
     }
 }
