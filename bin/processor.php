@@ -21,7 +21,7 @@ if ($res === false) {
 }
 
 
-$pool = new Pool(1, Composer::class);
+$pool = new Pool(THREADS_AMOUNT, Composer::class);
 for ($i = 0; $i < THREADS_AMOUNT; $i++) {
     $pool->submit(new Processor(DSL, REDIS_HOST, QUEUE_NAME, TABLE_NAME));
 }
