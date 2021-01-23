@@ -3,18 +3,29 @@
 namespace BotHelp;
 
 use PDO;
-use PhpAmqpLib\Message\AMQPMessage;
 use Redis;
 use Threaded;
 
 class Processor extends Threaded
 {
+    /**
+     * @var string
+     */
     private $dsl;
 
+    /**
+     * @var string string
+     */
     private $redisHost;
 
+    /**
+     * @var string string
+     */
     private $queueName;
 
+    /**
+     * @var string string
+     */
     private $tableName;
 
     public function __construct(string $dsl, string $redisHost, string $queueName, string $tableName)

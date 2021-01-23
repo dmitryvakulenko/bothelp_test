@@ -6,6 +6,9 @@ use Worker;
 
 class Composer extends Worker
 {
+    /**
+     * @var int
+     */
     private $lastStoredId = 0;
 
     public function canStore(int $id)
