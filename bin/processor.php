@@ -8,6 +8,7 @@ const TABLE_NAME = 'events';
 const QUEUE_NAME = 'events';
 const DSL = 'pgsql:host=postgres;port=5432;dbname=test;user=test;password=dev';
 const REDIS_HOST = 'queue';
+const THREADS_AMOUNT = 16;
 
 $db = new PDO(DSL);
 $res = $db->exec("create table if not exists " . TABLE_NAME . " (id serial not null primary key, account_id int not null, event_id int not null)");
@@ -21,6 +22,6 @@ if ($res === false) {
 
 
 $pool = new Pool(1, Composer::class);
-for ($i = 0; $i < 16; $i++) {
+for ($i = 0; $i < THREADS_AMOUNT; $i++) {
     $pool->submit(new Processor(DSL, REDIS_HOST, QUEUE_NAME, TABLE_NAME));
 }
