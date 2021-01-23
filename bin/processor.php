@@ -4,15 +4,23 @@ use BotHelp\{Composer, Processor};
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-const TABLE_NAME = 'records';
-const QUEUE_NAME = 'records';
+const TABLE_NAME = 'events';
+const QUEUE_NAME = 'events';
 const DSL = 'pgsql:host=postgres;port=5432;dbname=test;user=test;password=dev';
 const REDIS_HOST = 'queue';
 
 $db = new PDO(DSL);
-$db->exec("create table if not exist " . TABLE_NAME . " (id serial not null primary key, client_id, record_id)");
+$res = $db->exec("create table if not exists " . TABLE_NAME . " (id serial not null primary key, account_id int not null, event_id int not null)");
+if ($res === false) {
+    echo "Error table creation " . print_r($db->errorInfo(), true);
+}
+$res = $db->exec("delete from " . TABLE_NAME);
+if ($res === false) {
+    echo "Error table clearing " . print_r($db->errorInfo(), true);
+}
+
 
 $pool = new Pool(1, Composer::class);
-for ($i = 0; $i < 1; $i++) {
-    $pool->submit(new Processor(DSL, REDIS_HOST, QUEUE_NAME));
+for ($i = 0; $i < 16; $i++) {
+    $pool->submit(new Processor(DSL, REDIS_HOST, QUEUE_NAME, TABLE_NAME));
 }

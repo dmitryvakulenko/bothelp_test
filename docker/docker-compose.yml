@@ -4,17 +4,20 @@ services:
   processor:
     image: n0dwis/php-7.3-cli:1.2
     working_dir: /app
+    depends_on:
+      - postgres
     volumes:
       - '..:/app'
-    tty: true
-    command: /bin/sh
+    command: php ./bin/processor.php
 
   generator:
     image: n0dwis/php-7.3-cli:1.2
     working_dir: /app
+    depends_on:
+      - queue
     volumes:
       - '..:/app'
-    tty: true
+    command: php ./bin/generator.php
 
   queue:
     image: redis:6.0.10-alpine3.12

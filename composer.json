@@ -1,7 +1,12 @@
 {
   "name": "n0dwis/bothelp_test",
   "require": {
-    "php-amqplib/php-amqplib": "^2.12"
+    "php": "7.3",
+    "ext-pdo": "*",
+    "ext-pdo_pgsql": "*",
+    "ext-pthreads": "*",
+    "ext-redis": "*",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
